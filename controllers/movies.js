@@ -46,11 +46,11 @@ module.exports.createMovie = (req, res, next) => {
     movieId,
     owner: req.user._id,
   })
-    .then((movie) => movie.populate("owner"))
+    .then((movie) => movie.populate('owner'))
     .then((movie) => res.send(movie))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        next(new BadRequestError("Невалидные данные"));
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Невалидные данные'));
       } else {
         next(err);
       }
