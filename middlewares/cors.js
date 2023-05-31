@@ -3,8 +3,8 @@ const allowedCors = [
   'https://gasayliza.nomoredomains.monster',
   'http://api.gasayliza.nomoredomains.monster',
   'https://api.gasayliza.nomoredomains.monster',
-  'http://localhost:3000',
-  'https://localhost:3000',
+  'http://localhost:3005',
+  'https://localhost:3005',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';

@@ -1,37 +1,22 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
-const { movieRouter } = require('./movies');
-const { userRouter } = require('./users');
-const auth = require('../middlewares/auth');
-const { NotFoundError } = require('../errors/index');
-const { createUser, login } = require('../controllers/users');
+const { movieRouter } = require('./movies'); // роут фильмов
+const { userRouter } = require('./users'); // роут юзера
 
-router.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-      name: Joi.string().min(2).max(30),
-    }),
-  }),
-  createUser,
-);
+const auth = require('../middlewares/auth'); // мидлврэр авторизации
 
-router.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    }),
-  }),
-  login,
-);
+const { NotFoundError } = require('../errors/index'); // импорт кастомного класса ошибки
 
-router.get('/signout', (req, res) => {
-  res.clearCookie('jwt').send({ message: 'Выход' });
-});
+const { createUser, login, signout } = require('../controllers/users'); // импорт контроллера
+const {
+  registerValidator,
+  loginValidator,
+} = require('../middlewares/validations'); // импорт валидации регистрации и авторизации
+
+router.post('/signup', registerValidator, createUser);
+
+router.post('/signin', loginValidator, login);
+
+router.post('/signout', signout);
 
 router.use(auth);
 

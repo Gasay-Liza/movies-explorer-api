@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const { JWT_SECRET } = require('../utils/config');
 const User = require('../models/user');
 const {
   ConflictError,
@@ -25,13 +25,13 @@ module.exports.createUser = (req, res, next) => {
         .catch((err) => {
           if (err.code === 11000) {
             return next(
-              new ConflictError('Пользователь c таким email уже существует')
+              new ConflictError('Пользователь c таким email уже существует'),
             );
           }
           if (err.name === 'ValidationError') {
             return next(
               new BadRequestError(
-                'Переданы некорректные данные при создании пользователя'
+                'Переданы некорректные данные при создании пользователя',
               ),
             );
           }
@@ -48,12 +48,7 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       // создадим токен
-      const { NODE_ENV, JWT_SECRET } = process.env;
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' },
-      );
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
       // вернём токен
       res.cookie('jwt', token, {
         // token - наш JWT токен, который мы отправляем
@@ -65,9 +60,14 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.signout = (req, res) => {
+  // Выход из аккаунта
+  res.clearCookie('jwt').send({ message: 'Выход из аккаунта' });
+};
+
 module.exports.getUser = (req, res, next) => {
   // Возвращает информацию о пользователе (email и имя)
-  User.findById(req.user.UserId)
+  User.findById(req.user._id)
     .orFail(() => {
       throw new NotFoundError('Пользователь не найден');
     })

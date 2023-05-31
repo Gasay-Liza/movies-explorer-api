@@ -1,44 +1,42 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const validator = require('validator');
-// const { UnauthorizedError } = require('../errors/index');
 
 const movieSchema = new mongoose.Schema(
   {
     country: {
       // страна создания фильма
       type: String,
-      required: true,
+      required: [true, 'Поле "country" должно быть заполнено'],
     },
 
     director: {
       // режиссёр фильма.
       type: String,
-      required: true,
+      required: [true, 'Поле "director" должно быть заполнено'],
     },
 
     duration: {
       // длительность фильма
       type: Number,
-      required: true,
+      required: [true, 'Поле "duration" должно быть заполнено'],
     },
 
     year: {
       // год выпуска фильма
       type: Number,
-      required: true,
+      required: [true, 'Поле "year" должно быть заполнено'],
     },
 
     description: {
       // описание фильма
       type: String,
-      required: true,
+      required: [true, 'Поле "description" должно быть заполнено'],
     },
 
     image: {
       // ссылка на постер к фильму
       type: String,
-      required: true,
+      required: [true, 'Поле "image" должно быть заполнено'],
       validate: {
         validator: (string) => {
           validator.isURL(string);
@@ -49,7 +47,7 @@ const movieSchema = new mongoose.Schema(
     trailerLink: {
       // ссылка на трейлер фильма
       type: String,
-      required: true,
+      required: [true, 'Поле "trailerLink" должно быть заполнено'],
       validate: {
         validator: (string) => {
           validator.isURL(string);
@@ -60,7 +58,7 @@ const movieSchema = new mongoose.Schema(
     thumbnail: {
       // миниатюрное изображение постера к фильму
       type: String,
-      required: true,
+      required: [true, 'Поле "thumbnail" должно быть заполнено'],
       validate: {
         validator: (string) => {
           validator.isURL(string);
@@ -71,25 +69,25 @@ const movieSchema = new mongoose.Schema(
     owner: {
       // id пользователя, который сохранил фильм
       type: mongoose.Schema.Types.ObjectId, // тип - id
-      required: true,
+      required: [true, 'Не передан "owner"'],
     },
 
     movieId: {
       // id фильма, который содержится в ответе сервиса MoviesExplorer
       type: Number,
-      required: true,
+      required: [true, 'Не передан "movieId"'],
     },
 
     nameRU: {
       // название фильма на русском языке
       type: String,
-      required: true,
+      required: [true, 'Поле "nameRU" должно быть заполнено'],
     },
 
     nameEN: {
       // название фильма на английском языке
       type: String,
-      required: true,
+      required: [true, 'Поле "nameEN" должно быть заполнено'],
     },
   },
   {

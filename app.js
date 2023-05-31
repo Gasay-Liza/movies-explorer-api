@@ -8,20 +8,19 @@ const limiter = require('./middlewares/limiter');
 const cors = require('./middlewares/cors');
 const handlerError = require('./middlewares/handlerError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { MONGO_URL } = require('./utils/config');
 
 const app = express();
-
-require('dotenv').config();
 
 // импорт роутеров
 const { router } = require('./routes/index');
 
+const { PORT = 3005 } = process.env;
+
 // подключение к базе mongoose с фильмами
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
 });
-
-const { PORT = 3005 } = process.env;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,14 +40,7 @@ app.use(errorLogger); // подключаем логгер ошибок
 router.use(errors());
 
 // централизованный обработчик ошибок
-router.use((err, req, res, next) => {
-  handlerError({
-    err,
-    req,
-    res,
-    next,
-  });
-});
+router.use(handlerError);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}!`);
