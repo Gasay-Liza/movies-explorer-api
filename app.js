@@ -1,40 +1,54 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+
+const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-// const handlerError = require('./middlewares/handlerError');
-// const { requestLogger, errorLogger } = require('./middlewares/logger');
+const helmet = require('helmet');
+const limiter = require('./middlewares/limiter');
+const cors = require('./middlewares/cors');
+const handlerError = require('./middlewares/handlerError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
-// const { router } = require('./routes/index');
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+// импорт роутеров
+const { router } = require('./routes/index');
+
+// подключение к базе mongoose с фильмами
+mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
 });
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3005 } = process.env;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.use(requestLogger); // подключаем логгер запросов
+app.use(requestLogger); // подключаем логгер запросов
 
-// app.use(router);
+// Миддлвэры для безопасности
+app.use(helmet()); // Настройка заголовков ответа
+app.use(limiter); // Защита от множества автоматических запросов
+app.use(cors);
 
-// app.use(errorLogger); // подключаем логгер ошибок
+app.use(router);
 
-// router.use(errors());
+app.use(errorLogger); // подключаем логгер ошибок
 
-// // централизованный обработчик ошибок
-// router.use((err, req, res, next) => {
-//   handlerError({
-//     err,
-//     req,
-//     res,
-//     next,
-//   });
-// });
+router.use(errors());
+
+// централизованный обработчик ошибок
+router.use((err, req, res, next) => {
+  handlerError({
+    err,
+    req,
+    res,
+    next,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}!`);
