@@ -9,7 +9,7 @@ const {
 } = require('../errors/index');
 
 module.exports.createUser = (req, res, next) => {
-  // Создаёт карточку при регистрации
+  // Создаёт юзера при регистрации
 
   const { email, password, name } = req.body;
 
@@ -21,7 +21,7 @@ module.exports.createUser = (req, res, next) => {
         password: hash,
         name,
       })
-        .then((user) => res.status(201).send({ data: user }))
+        .then((user) => res.status(201).send(user))
         .catch((err) => {
           if (err.code === 11000) {
             return next(
@@ -52,7 +52,7 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
       // вернём токен
       res.cookie('jwt', token, {
@@ -67,11 +67,11 @@ module.exports.login = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   // Возвращает информацию о пользователе (email и имя)
-  User.findById(req.user._id)
+  User.findById(req.user.UserId)
     .orFail(() => {
       throw new NotFoundError('Пользователь не найден');
     })
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
@@ -90,7 +90,7 @@ module.exports.updateUser = (req, res, next) => {
     .orFail(() => {
       throw new NotFoundError('Пользователь с указанным _id не найден');
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы некорректные данные'));
