@@ -3,7 +3,6 @@ const { celebrate, Joi } = require('celebrate');
 const { movieRouter } = require('./movies');
 const { userRouter } = require('./users');
 const auth = require('../middlewares/auth');
-const { linkRegex } = require('../utils/constans');
 const { NotFoundError } = require('../errors/index');
 const { createUser, login } = require('../controllers/users');
 
@@ -16,7 +15,7 @@ router.post(
       name: Joi.string().min(2).max(30),
     }),
   }),
-  createUser
+  createUser,
 );
 
 router.post(
@@ -27,7 +26,7 @@ router.post(
       password: Joi.string().required(),
     }),
   }),
-  login
+  login,
 );
 
 router.get('/signout', (req, res) => {
