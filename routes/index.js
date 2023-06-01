@@ -16,9 +16,9 @@ router.post('/signup', registerValidator, createUser);
 
 router.post('/signin', loginValidator, login);
 
-router.post('/signout', signout);
+router.use(auth); // далее роуты защищены авторизацией
 
-router.use(auth);
+router.post('/signout', signout);
 
 router.use('/movies', movieRouter);
 router.use('/users', userRouter);

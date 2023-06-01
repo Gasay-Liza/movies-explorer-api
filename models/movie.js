@@ -23,7 +23,7 @@ const movieSchema = new mongoose.Schema(
 
     year: {
       // год выпуска фильма
-      type: Number,
+      type: String,
       required: [true, 'Поле "year" должно быть заполнено'],
     },
 

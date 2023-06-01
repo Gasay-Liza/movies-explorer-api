@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
-const UnauthorizedError = require('../errors/UnauthorizedError');
+const { UnauthorizedError } = require('../errors/UnauthorizedError');
+const { INCORRECT_USERDATA_MESSAGE } = require('../utils/errors');
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,13 +26,15 @@ const userSchema = new mongoose.Schema(
     name: {
       // имя пользователя
       type: String,
-      required: false,
+      required: true,
       minlength: 2, // минимальная длина имени — 2 символа
       maxlength: 30, // а максимальная — 30 символов
     },
   },
   {
     versionKey: false,
+    toJSON: { useProjection: true },
+    toObject: { useProjection: true },
   },
 );
 
@@ -43,14 +46,14 @@ userSchema.statics.findUserByCredentials = function (email, password) {
       // не нашёлся — отклоняем промис
       if (!user) {
         return Promise.reject(
-          new UnauthorizedError('Неправильные почта или пароль'),
+          new UnauthorizedError(INCORRECT_USERDATA_MESSAGE),
         );
       }
       // нашёлся — сравниваем хеши
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
           return Promise.reject(
-            new UnauthorizedError('Неправильные почта или пароль'),
+            new UnauthorizedError(INCORRECT_USERDATA_MESSAGE),
           );
         }
 

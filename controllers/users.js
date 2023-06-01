@@ -8,6 +8,17 @@ const {
   BadRequestError,
 } = require('../errors/index');
 
+const {
+  SUCCESS_STATUS_OK,
+  SUCCESS_STATUS_CREATED,
+  DUPLICATION_ERROR,
+  USER_BAD_REQUEST_ERROR_MESSAGE,
+  EMAIL_DUPLICATION_ERROR_MESSAGE,
+  USER_NOT_FOUND_ERROR_MESSAGE,
+  SUCCESSFUL_LOGIN_MESSAGE,
+  SUCCESSFUL_LOGOUT_MESSAGE,
+} = require('../utils/errors');
+
 module.exports.createUser = (req, res, next) => {
   // Создаёт юзера при регистрации
 
@@ -21,19 +32,13 @@ module.exports.createUser = (req, res, next) => {
         password: hash,
         name,
       })
-        .then((user) => res.status(201).send(user))
+        .then((user) => res.status(SUCCESS_STATUS_CREATED).send(user))
         .catch((err) => {
-          if (err.code === 11000) {
-            return next(
-              new ConflictError('Пользователь c таким email уже существует'),
-            );
+          if (err.code === DUPLICATION_ERROR) {
+            return next(new ConflictError(EMAIL_DUPLICATION_ERROR_MESSAGE));
           }
           if (err.name === 'ValidationError') {
-            return next(
-              new BadRequestError(
-                'Переданы некорректные данные при создании пользователя',
-              ),
-            );
+            return next(new BadRequestError(USER_BAD_REQUEST_ERROR_MESSAGE));
           }
           return next(err);
         });
@@ -55,45 +60,50 @@ module.exports.login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
-      res.status(200).send({ message: 'Login succesful' });
+      res
+        .status(SUCCESS_STATUS_CREATED)
+        .send({ message: SUCCESSFUL_LOGIN_MESSAGE });
     })
     .catch(next);
 };
 
 module.exports.signout = (req, res) => {
   // Выход из аккаунта
-  res.clearCookie('jwt').send({ message: 'Выход из аккаунта' });
+  res.clearCookie('jwt').send({ message: SUCCESSFUL_LOGOUT_MESSAGE });
 };
 
 module.exports.getUser = (req, res, next) => {
   // Возвращает информацию о пользователе (email и имя)
   User.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError('Пользователь не найден');
+      throw new NotFoundError(USER_NOT_FOUND_ERROR_MESSAGE);
     })
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(SUCCESS_STATUS_OK).send(user))
     .catch(next);
 };
 
 module.exports.updateUser = (req, res, next) => {
   // Обновляет информацию о пользователе (email и имя)
   const id = req.user._id;
-  const { name, about } = req.body;
+  const { name, email } = req.body;
   User.findByIdAndUpdate(
     id,
-    { name, about },
+    { name, email },
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
     .orFail(() => {
-      throw new NotFoundError('Пользователь с указанным _id не найден');
+      throw new NotFoundError(USER_NOT_FOUND_ERROR_MESSAGE);
     })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы некорректные данные'));
+        return next(new BadRequestError(USER_BAD_REQUEST_ERROR_MESSAGE));
+      }
+      if (err.code === DUPLICATION_ERROR) {
+        return next(new ConflictError(EMAIL_DUPLICATION_ERROR_MESSAGE));
       }
       return next(err);
     });
