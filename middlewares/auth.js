@@ -4,14 +4,14 @@ const {
   UnauthorizedError,
 } = require('../errors/index');
 
-const { UNAUTHORIZED_ERROR_MESSAGE } = require('../utils/errors');
+const { AUTHORIZATION_NOT_FOUND_TOKEN_ERROR_MESSAGE, AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE } = require('../utils/errors');
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
   const token = req.cookies.jwt;
 
   if (!token) {
-    return next(new UnauthorizedError(UNAUTHORIZED_ERROR_MESSAGE));
+    return next(new UnauthorizedError(AUTHORIZATION_NOT_FOUND_TOKEN_ERROR_MESSAGE));
   }
   // извлечём токен
 
@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     // отправим ошибку, если не получилось
-    return next(new UnauthorizedError(UNAUTHORIZED_ERROR_MESSAGE));
+    return next(new UnauthorizedError(AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса

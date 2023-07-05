@@ -11,18 +11,28 @@ const DUPLICATION_ERROR = 11000;
 
 // сообщения
 const USER_BAD_REQUEST_ERROR_MESSAGE = 'Переданы некорректные данные';
+
 const VALIDATION_ERROR_MESSAGE = 'Невалидные данные';
 const UNAUTHORIZED_ERROR_MESSAGE = 'Необходима авторизация';
 const INCORRECT_USERDATA_MESSAGE = 'Неправильные почта или пароль';
 const DELETE_MOVIE_FORBIDDEN_ERROR_MESSAGE = 'Нельзя удалить чужой фильм';
 const USER_NOT_FOUND_ERROR_MESSAGE = 'Пользователь не найден';
 const MOVIE_NOT_FOUND_ERROR_MESSAGE = 'Фильм не найден';
-const EMAIL_DUPLICATION_ERROR_MESSAGE = 'Пользователь c таким email уже существует';
 const INTERNAL_SERVER_ERROR_MESSAGE = 'На сервере произошла ошибка';
 const SUCCESSFUL_LOGIN_MESSAGE = 'Успешная авторизация';
 const SUCCESSFUL_LOGOUT_MESSAGE = 'Выход из аккаунта';
+const AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE = 'Вы ввели неправильный логин или пароль.';
+const AUTHORIZATION_NOT_FOUND_TOKEN_ERROR_MESSAGE = 'При авторизации произошла ошибка. Токен не передан или передан не в том формате.';
+const AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE = 'При авторизации произошла ошибка. Переданный токен некорректен.';
+const REGISTER_BAD_REQUEST_ERROR_MESSAGE = 'При регистрации пользователя произошла ошибка';
+const REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE = 'При регистрации пользователя произошла ошибка';
 
 module.exports = {
+  AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE,
+  AUTHORIZATION_NOT_FOUND_TOKEN_ERROR_MESSAGE,
+  AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE,
+  REGISTER_BAD_REQUEST_ERROR_MESSAGE,
+  REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE,
   USER_BAD_REQUEST_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   UNAUTHORIZED_ERROR_MESSAGE,
@@ -30,7 +40,6 @@ module.exports = {
   DELETE_MOVIE_FORBIDDEN_ERROR_MESSAGE,
   USER_NOT_FOUND_ERROR_MESSAGE,
   MOVIE_NOT_FOUND_ERROR_MESSAGE,
-  EMAIL_DUPLICATION_ERROR_MESSAGE,
   INTERNAL_SERVER_ERROR_MESSAGE,
   SUCCESSFUL_LOGIN_MESSAGE,
   SUCCESSFUL_LOGOUT_MESSAGE,

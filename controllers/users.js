@@ -9,11 +9,13 @@ const {
 } = require('../errors/index');
 
 const {
+  AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE,
   SUCCESS_STATUS_OK,
   SUCCESS_STATUS_CREATED,
   DUPLICATION_ERROR,
   USER_BAD_REQUEST_ERROR_MESSAGE,
-  EMAIL_DUPLICATION_ERROR_MESSAGE,
+  REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE,
+  REGISTER_BAD_REQUEST_ERROR_MESSAGE,
   USER_NOT_FOUND_ERROR_MESSAGE,
   SUCCESSFUL_LOGIN_MESSAGE,
   SUCCESSFUL_LOGOUT_MESSAGE,
@@ -21,8 +23,7 @@ const {
 
 module.exports.createUser = (req, res, next) => {
   // Создаёт юзера при регистрации
-
-  const { email, password, name } = req.body;
+  const { name, email, password } = req.body;
 
   bcrypt
     .hash(password, 10)
@@ -35,10 +36,10 @@ module.exports.createUser = (req, res, next) => {
         .then((user) => res.status(SUCCESS_STATUS_CREATED).send(user))
         .catch((err) => {
           if (err.code === DUPLICATION_ERROR) {
-            return next(new ConflictError(EMAIL_DUPLICATION_ERROR_MESSAGE));
+            return next(new ConflictError(REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE));
           }
           if (err.name === 'ValidationError') {
-            return next(new BadRequestError(USER_BAD_REQUEST_ERROR_MESSAGE));
+            return next(new BadRequestError(REGISTER_BAD_REQUEST_ERROR_MESSAGE));
           }
           return next(err);
         });
@@ -76,7 +77,7 @@ module.exports.getUser = (req, res, next) => {
   // Возвращает информацию о пользователе (email и имя)
   User.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError(USER_NOT_FOUND_ERROR_MESSAGE);
+      throw new NotFoundError(AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE);
     })
     .then((user) => res.status(SUCCESS_STATUS_OK).send(user))
     .catch(next);
