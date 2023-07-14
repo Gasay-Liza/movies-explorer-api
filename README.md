@@ -12,6 +12,7 @@
 
 ## Ссылки на проект
 Backend https://api.gasay-movies-explorer.nomoredomains.rocks
+Frontend and backend https://gasay-movies-explorer.nomoredomains.xyz/
 ## Запуск проекта
 
 `npm run start` — запускает сервер   
