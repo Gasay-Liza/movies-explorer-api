@@ -1,6 +1,8 @@
 const allowedCors = [
   'http://api.gasay-movies-explorer.nomoredomains.rocks',
   'https://api.gasay-movies-explorer.nomoredomains.rocks',
+  'https://gasay-movies-explorer.nomoredomains.xyz',
+  'http://gasay-movies-explorer.nomoredomains.xyz',
   'http://localhost:3000',
   'https://localhost:3000',
   'http://localhost:3001',
