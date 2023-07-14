@@ -15,6 +15,7 @@ const {
   DUPLICATION_ERROR,
   USER_BAD_REQUEST_ERROR_MESSAGE,
   REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE,
+  USER_DUPLICATION_ERROR_MESSAGE,
   REGISTER_BAD_REQUEST_ERROR_MESSAGE,
   USER_NOT_FOUND_ERROR_MESSAGE,
   SUCCESSFUL_LOGIN_MESSAGE,
@@ -104,7 +105,7 @@ module.exports.updateUser = (req, res, next) => {
         return next(new BadRequestError(USER_BAD_REQUEST_ERROR_MESSAGE));
       }
       if (err.code === DUPLICATION_ERROR) {
-        return next(new ConflictError(EMAIL_DUPLICATION_ERROR_MESSAGE));
+        return next(new ConflictError(USER_DUPLICATION_ERROR_MESSAGE));
       }
       return next(err);
     });

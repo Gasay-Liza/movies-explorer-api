@@ -10,8 +10,7 @@ const INTERNAL_SERVER_ERROR = 500;
 const DUPLICATION_ERROR = 11000;
 
 // сообщения
-const USER_BAD_REQUEST_ERROR_MESSAGE = 'Переданы некорректные данные';
-
+const USER_BAD_REQUEST_ERROR_MESSAGE = 'При обновлении профиля произошла ошибка';
 const VALIDATION_ERROR_MESSAGE = 'Невалидные данные';
 const UNAUTHORIZED_ERROR_MESSAGE = 'Необходима авторизация';
 const INCORRECT_USERDATA_MESSAGE = 'Неправильные почта или пароль';
@@ -25,7 +24,8 @@ const AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE = 'Вы ввели неправ
 const AUTHORIZATION_NOT_FOUND_TOKEN_ERROR_MESSAGE = 'При авторизации произошла ошибка. Токен не передан или передан не в том формате.';
 const AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE = 'При авторизации произошла ошибка. Переданный токен некорректен.';
 const REGISTER_BAD_REQUEST_ERROR_MESSAGE = 'При регистрации пользователя произошла ошибка';
-const REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE = 'При регистрации пользователя произошла ошибка';
+const REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE = 'Пользователь с таким email уже существует';
+const USER_DUPLICATION_ERROR_MESSAGE = 'Пользователь с таким email уже существует';
 
 module.exports = {
   AUTHORIZATION_NOT_FOUND_USER_ERROR_MESSAGE,
@@ -33,6 +33,7 @@ module.exports = {
   AUTHORIZATION_INVALID_TOKEN_ERROR_MESSAGE,
   REGISTER_BAD_REQUEST_ERROR_MESSAGE,
   REGISTER_EMAIL_DUPLICATION_ERROR_MESSAGE,
+  USER_DUPLICATION_ERROR_MESSAGE,
   USER_BAD_REQUEST_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   UNAUTHORIZED_ERROR_MESSAGE,
