@@ -5,14 +5,6 @@ const allowedCors = [
   'https://localhost:3000',
   'http://localhost:3001',
   'https://localhost:3001',
-  'https://localhost:3002',
-  'http://localhost:3002',
-  'https://localhost:3003',
-  'http://localhost:3003',
-  'https://localhost:3004',
-  'http://localhost:3004',
-  'https://localhost:3005',
-  'http://localhost:3005',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';

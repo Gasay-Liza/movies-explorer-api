@@ -15,7 +15,7 @@ const app = express();
 // импорт роутеров
 const { router } = require('./routes/index');
 
-const { PORT = 3003 } = process.env;
+const { PORT = 3000 } = process.env;
 
 // подключение к базе mongoose с фильмами
 mongoose.connect(MONGO_URL, {
